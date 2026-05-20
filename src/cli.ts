@@ -1,17 +1,19 @@
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { BASE_URL_ENV } from "./constants.js";
+import { getApiKeyFromEnv } from "./env.js";
 import { createServer } from "./server.js";
 
-const apiKey = process.env.TA_API_KEY;
-if (!apiKey) {
+try {
+  const apiKey = getApiKeyFromEnv();
+  const options = process.env[BASE_URL_ENV]
+    ? { baseUrl: process.env[BASE_URL_ENV] }
+    : {};
+  const server = createServer(apiKey, options);
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+} catch (err) {
   process.stderr.write(
-    "Error: TA_API_KEY environment variable is not set.\n" +
-      "Set it to your Township America Pro+ API key.\n" +
-      "Generate a key at https://app.townshipamerica.com/settings/api-keys\n"
+    `Error: ${err instanceof Error ? err.message : String(err)}\n`,
   );
   process.exit(1);
 }
-
-const server = createServer(apiKey);
-const transport = new StdioServerTransport();
-
-await server.connect(transport);

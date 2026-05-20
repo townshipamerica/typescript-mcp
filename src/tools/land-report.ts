@@ -12,16 +12,17 @@ export const landReportTool: Tool = {
     properties: {
       description: {
         type: "string",
-        description: "PLSS legal land description, e.g. 'NW 25 24N 1E 6th Meridian'"
-      }
+        description:
+          "PLSS legal land description, e.g. 'NW 25 24N 1E 6th Meridian'",
+      },
     },
-    required: ["description"]
-  }
+    required: ["description"],
+  },
 };
 
 export async function runLandReport(
   _client: unknown,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
 ): Promise<CallToolResult> {
   const description = args.description;
   if (typeof description !== "string" || description.trim().length === 0) {
@@ -36,7 +37,7 @@ export async function runLandReport(
     description: description.trim(),
     message:
       "Federal Land Report via MCP is coming Q3 2025. " +
-      "Currently, Federal Land Reports are available via the Township America web app at " +
+      "Currently available via the Township America web app at " +
       "https://app.townshipamerica.com for Pro+ subscribers. " +
       "A dedicated API-key-authenticated endpoint will be available for AI agents this quarter.",
     preview_fields: [
@@ -47,8 +48,8 @@ export async function runLandReport(
       "national_park",
       "tribal_lands",
       "water_rights",
-      "patents"
-    ]
+      "patents",
+    ],
   };
 
   return ok(JSON.stringify(stub, null, 2));

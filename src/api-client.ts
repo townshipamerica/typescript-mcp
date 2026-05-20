@@ -1,15 +1,20 @@
-import type { GeoJSONFeatureCollection, SearchResult, ServerOptions } from "./types.js";
+import {
+  DEFAULT_BASE_URL,
+  DEFAULT_TIMEOUT_MS,
+  PACKAGE_VERSION,
+  QUOTA_ERROR,
+} from "./constants.js";
+import type {
+  GeoJSONFeatureCollection,
+  SearchResult,
+  ServerOptions,
+} from "./types.js";
 
-export const DEFAULT_BASE_URL = "https://developer.townshipamerica.com";
-export const DEFAULT_TIMEOUT_MS = 10_000;
+export { QUOTA_ERROR };
 
-/** Quota-exceeded error message returned as MCP tool content */
-export const QUOTA_ERROR =
-  "Pro+ bundled quota exceeded for this endpoint (1,000 calls/month). " +
-  "Upgrade to standalone Scale tier ($100/mo for 10,000 calls) or wait for next month. " +
-  "Visit https://townshipamerica.com/pricing to manage your plan.";
-
-export function extractSearchResult(fc: GeoJSONFeatureCollection): SearchResult {
+export function extractSearchResult(
+  fc: GeoJSONFeatureCollection,
+): SearchResult {
   const centroid = fc.features.find((f) => f.properties.shape === "centroid");
   const grid = fc.features.find((f) => f.properties.shape === "grid");
   const props = centroid?.properties ?? grid?.properties;
@@ -18,12 +23,18 @@ export function extractSearchResult(fc: GeoJSONFeatureCollection): SearchResult 
     throw new Error("Unexpected API response: no features returned");
   }
 
-  const coords = centroid?.geometry.type === "Point" ? centroid.geometry.coordinates : [0, 0];
+  const coords =
+    centroid?.geometry.type === "Point"
+      ? centroid.geometry.coordinates
+      : [0, 0];
   const [lng, lat] = coords as [number, number];
 
   const boundary =
     grid?.geometry.type === "Polygon"
-      ? (grid.geometry as { type: "Polygon"; coordinates: [number, number][][] })
+      ? (grid.geometry as {
+          type: "Polygon";
+          coordinates: [number, number][][];
+        })
       : null;
 
   return {
@@ -32,7 +43,7 @@ export function extractSearchResult(fc: GeoJSONFeatureCollection): SearchResult 
     lng,
     state: props.state,
     county: props.county,
-    geometry: boundary
+    geometry: boundary,
   };
 }
 
@@ -42,7 +53,7 @@ export class ApiClient {
 
   constructor(
     private readonly apiKey: string,
-    options: ServerOptions = {}
+    options: ServerOptions = {},
   ) {
     this.baseUrl = (options.baseUrl ?? DEFAULT_BASE_URL).replace(/\/+$/, "");
     this.timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
@@ -57,10 +68,10 @@ export class ApiClient {
         ...init,
         headers: {
           "X-API-Key": this.apiKey,
-          "User-Agent": "@townshipamerica/mcp-server/0.1.0",
-          ...(init?.headers ?? {})
+          "User-Agent": `@townshipamerica/mcp-server/${PACKAGE_VERSION}`,
+          ...(init?.headers ?? {}),
         },
-        signal: controller.signal
+        signal: controller.signal,
       });
 
       if (response.status === 429) {
@@ -84,7 +95,10 @@ export class ApiClient {
       if (err instanceof DOMException && err.name === "AbortError") {
         throw new ApiError("Request timed out after 10s", 408);
       }
-      throw new ApiError(err instanceof Error ? err.message : "Unknown error", 0);
+      throw new ApiError(
+        err instanceof Error ? err.message : "Unknown error",
+        0,
+      );
     } finally {
       clearTimeout(timer);
     }
@@ -101,7 +115,7 @@ export class QuotaError extends Error {
 export class ApiError extends Error {
   constructor(
     message: string,
-    public readonly statusCode: number
+    public readonly statusCode: number,
   ) {
     super(message);
     this.name = "ApiError";

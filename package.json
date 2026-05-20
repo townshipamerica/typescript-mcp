@@ -1,6 +1,6 @@
 {
   "name": "@townshipamerica/mcp-server",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Township America MCP server — PLSS tools for AI agents (Claude Desktop, Cursor, Continue, Cline)",
   "type": "module",
   "main": "./dist/index.js",
@@ -14,7 +14,7 @@
     }
   },
   "bin": {
-    "township-mcp": "./dist/cli.js"
+    "townshipamerica-mcp": "./dist/cli.js"
   },
   "files": [
     "dist",
@@ -49,6 +49,7 @@
     "@modelcontextprotocol/sdk": "^1.29.0"
   },
   "devDependencies": {
+    "@types/node": "^22.19.19",
     "tsup": "^8.4.0",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"

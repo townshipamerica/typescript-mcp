@@ -95,12 +95,13 @@ tools:
   - plss_to_geojson
   - validate_description
   - batch_convert
+  - autocomplete
   - land_report
 install:
   command: npx
   args: [-y, "@townshipamerica/mcp-server"]
   env:
-    TA_API_KEY: "your Pro+ bundled API key"
+    TOWNSHIP_AMERICA_API_KEY: "your Pro+ bundled API key"
 ```
 
 ### 3a. mcpservers.org (GitHub PR)

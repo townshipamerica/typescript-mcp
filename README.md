@@ -4,7 +4,11 @@ Township America MCP server — PLSS tools for AI agents (Claude Desktop, Cursor
 
 Requires a [Pro+ subscription](https://townshipamerica.com/pricing) ($99/mo).
 
+[API Documentation](https://townshipamerica.com/api) · [GitHub](https://github.com/townshipamerica/typescript-mcp) · [npm](https://www.npmjs.com/package/@townshipamerica/mcp-server) · [Python MCP](https://github.com/townshipamerica/python-mcp)
+
 ## Quick Start
+
+Generate your API key at [app.townshipamerica.com/settings/api-keys](https://app.townshipamerica.com/settings/api-keys).
 
 ### Claude Desktop
 
@@ -17,7 +21,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
       "command": "npx",
       "args": ["-y", "@townshipamerica/mcp-server"],
       "env": {
-        "TA_API_KEY": "your_api_key_here"
+        "TOWNSHIP_AMERICA_API_KEY": "your_api_key_here"
       }
     }
   }
@@ -37,75 +41,63 @@ Edit `~/.cursor/mcp.json`:
       "command": "npx",
       "args": ["-y", "@townshipamerica/mcp-server"],
       "env": {
-        "TA_API_KEY": "your_api_key_here"
+        "TOWNSHIP_AMERICA_API_KEY": "your_api_key_here"
       }
     }
   }
 }
 ```
 
-### Continue
+### Continue / Cline
 
-Edit `~/.continue/config.json`:
+Use the same `npx` command with `TOWNSHIP_AMERICA_API_KEY` in `env` (see examples in this repo's history for Continue/Cline JSON shapes).
 
-```json
-{
-  "experimental": {
-    "modelContextProtocolServers": [
-      {
-        "transport": {
-          "type": "stdio",
-          "command": "npx",
-          "args": ["-y", "@townshipamerica/mcp-server"],
-          "env": { "TA_API_KEY": "your_api_key_here" }
-        }
-      }
-    ]
-  }
-}
-```
+### Local binary
 
-### Cline
+After `npm install -g @townshipamerica/mcp-server`:
 
-Add to Cline MCP Servers settings:
-
-```json
-{
-  "mcpServers": {
-    "townshipamerica": {
-      "command": "npx",
-      "args": ["-y", "@townshipamerica/mcp-server"],
-      "env": { "TA_API_KEY": "your_api_key_here" }
-    }
-  }
-}
+```bash
+TOWNSHIP_AMERICA_API_KEY=ta_… townshipamerica-mcp
 ```
 
 ## Tools
 
-| Tool                   | Description                                                    |
-| ---------------------- | -------------------------------------------------------------- |
-| `plss_to_coordinates`  | Convert a PLSS description to GPS coordinates                  |
-| `coordinates_to_plss`  | Find the PLSS description for GPS coordinates                  |
-| `plss_to_geojson`      | Get the GeoJSON boundary polygon for a PLSS description        |
-| `validate_description` | Validate and normalize a PLSS description (local, no API call) |
-| `batch_convert`        | Convert up to 1,000 PLSS descriptions in one request           |
-| `land_report`          | Federal Land Report — coming Q3 2025                           |
+| Tool | Description |
+| --- | --- |
+| `plss_to_coordinates` | Convert a PLSS description to GPS coordinates |
+| `coordinates_to_plss` | Find the PLSS description for GPS coordinates |
+| `plss_to_geojson` | Get the GeoJSON boundary polygon for a PLSS description |
+| `validate_description` | Validate and normalize locally (no API call) |
+| `batch_convert` | Convert up to 100 descriptions in one request |
+| `autocomplete` | Suggestions for partial PLSS input (max 10) |
+| `land_report` | Federal Land Report — coming Q3 2025 |
+
+Coverage: 30 PLSS states, 37 principal meridians. Powered by BLM CadNSDI V2.
 
 ## Authentication
 
-Get your API key at [app.townshipamerica.com/settings/api-keys](https://app.townshipamerica.com/settings/api-keys).
+| Variable | Purpose |
+| --- | --- |
+| `TOWNSHIP_AMERICA_API_KEY` | Your Pro+ API key (**preferred**) |
+| `TA_API_KEY` | Legacy alias for `TOWNSHIP_AMERICA_API_KEY` |
+| `TOWNSHIP_AMERICA_BASE_URL` | Override API base URL (default: `https://developer.townshipamerica.com`) |
 
 ## Quota
 
-Pro+ bundled API access: 1,000 search calls/month. Quota is enforced by the AWS API Gateway. If exceeded, tools return:
-
-> "Pro+ bundled quota exceeded (1,000 calls/month). Upgrade to standalone Scale tier ($100/mo for 10,000 calls) or wait for next month."
+Pro+ bundled API access: 1,000 search calls/month. Quota is enforced by the API. If exceeded, tools return a clear message with upgrade guidance.
 
 ## Requirements
 
 - Node.js 22+
 - Pro+ API key
+
+## Programmatic use
+
+```typescript
+import { createServer } from "@townshipamerica/mcp-server";
+
+const server = createServer(process.env.TOWNSHIP_AMERICA_API_KEY!);
+```
 
 ## License
 
