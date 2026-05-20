@@ -1,6 +1,6 @@
 # Releasing the Township America MCP Server
 
-This runbook covers shipping `@townshipamerica/mcp-server` to npm + the
+This runbook covers shipping `townshipamerica-mcp` to npm + the
 companion `townshipamerica-mcp` PyPI package + submitting to the major MCP
 registries. Each step requires credentials we can't safely commit; the
 runbook is checklists you can step through.
@@ -11,7 +11,7 @@ runbook is checklists you can step through.
 
 ### npm
 
-Reserve `@townshipamerica/mcp-server`:
+Reserve `townshipamerica-mcp`:
 
 ```bash
 cd packages/mcp-server
@@ -63,7 +63,7 @@ npm publish --access public
 Test from a fresh shell:
 
 ```bash
-npx -y @townshipamerica/mcp-server@latest
+npx -y townshipamerica-mcp@latest
 # Should start the MCP server on stdio
 ```
 
@@ -99,7 +99,7 @@ tools:
   - land_report
 install:
   command: npx
-  args: [-y, "@townshipamerica/mcp-server"]
+  args: [-y, "townshipamerica-mcp"]
   env:
     TOWNSHIP_AMERICA_API_KEY: "your Pro+ bundled API key"
 ```

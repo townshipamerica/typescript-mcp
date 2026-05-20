@@ -40,7 +40,7 @@ jobs:
             echo "Tag version ($TAG_VERSION) doesn't match package.json ($PKG_VERSION)"
             exit 1
           fi
-          echo "Publishing @townshipamerica/mcp-server@$PKG_VERSION"
+          echo "Publishing townshipamerica-mcp@$PKG_VERSION"
 
       - name: Publish to npm
         run: npm publish --access public

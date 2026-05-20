@@ -68,7 +68,7 @@ export class ApiClient {
         ...init,
         headers: {
           "X-API-Key": this.apiKey,
-          "User-Agent": `@townshipamerica/mcp-server/${PACKAGE_VERSION}`,
+          "User-Agent": `townshipamerica-mcp/${PACKAGE_VERSION}`,
           ...(init?.headers ?? {}),
         },
         signal: controller.signal,

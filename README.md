@@ -1,10 +1,10 @@
-# @townshipamerica/mcp-server
+# townshipamerica-mcp
 
 Township America MCP server — PLSS tools for AI agents (Claude Desktop, Cursor, Continue, Cline).
 
 Requires a [Pro+ subscription](https://townshipamerica.com/pricing) ($99/mo).
 
-[API Documentation](https://townshipamerica.com/api) · [GitHub](https://github.com/townshipamerica/typescript-mcp) · [npm](https://www.npmjs.com/package/@townshipamerica/mcp-server) · [Python MCP](https://github.com/townshipamerica/python-mcp)
+[API Documentation](https://townshipamerica.com/api) · [GitHub](https://github.com/townshipamerica/typescript-mcp) · [npm](https://www.npmjs.com/package/townshipamerica-mcp) · [Python MCP](https://github.com/townshipamerica/python-mcp)
 
 ## Quick Start
 
@@ -19,7 +19,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
   "mcpServers": {
     "townshipamerica": {
       "command": "npx",
-      "args": ["-y", "@townshipamerica/mcp-server"],
+      "args": ["-y", "townshipamerica-mcp"],
       "env": {
         "TOWNSHIP_AMERICA_API_KEY": "your_api_key_here"
       }
@@ -39,7 +39,7 @@ Edit `~/.cursor/mcp.json`:
   "mcpServers": {
     "townshipamerica": {
       "command": "npx",
-      "args": ["-y", "@townshipamerica/mcp-server"],
+      "args": ["-y", "townshipamerica-mcp"],
       "env": {
         "TOWNSHIP_AMERICA_API_KEY": "your_api_key_here"
       }
@@ -54,7 +54,7 @@ Use the same `npx` command with `TOWNSHIP_AMERICA_API_KEY` in `env` (see example
 
 ### Local binary
 
-After `npm install -g @townshipamerica/mcp-server`:
+After `npm install -g townshipamerica-mcp`:
 
 ```bash
 TOWNSHIP_AMERICA_API_KEY=ta_… townshipamerica-mcp
@@ -94,7 +94,7 @@ Pro+ bundled API access: 1,000 search calls/month. Quota is enforced by the API.
 ## Programmatic use
 
 ```typescript
-import { createServer } from "@townshipamerica/mcp-server";
+import { createServer } from "townshipamerica-mcp";
 
 const server = createServer(process.env.TOWNSHIP_AMERICA_API_KEY!);
 ```
