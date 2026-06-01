@@ -1,4 +1,5 @@
 import type { ValidationResult } from "./types.js";
+import { isValidTxss, normalizeTxss } from "./tx-validation.js";
 
 // PLSS regex patterns (from web-app land-description rules; shared with python-mcp)
 const TWP_PATTERN =
@@ -22,10 +23,10 @@ const QUARTER_ALIASES: Record<string, string> = {
 };
 
 const INVALID_SUGGESTION =
-  "PLSS descriptions follow the pattern: [Quarter] [Section] [Township][N/S] " +
-  "[Range][E/W] [Principal Meridian]. " +
-  "Example: 'NW 25 24N 1E 6th Meridian' or 'T4N R5E Sec 12 NE'. " +
-  "Ensure township/range direction letters (N/S, E/W) are present and a meridian name is included.";
+  "Legal descriptions follow PLSS or Texas TXSS patterns. " +
+  "PLSS example: 'NW 25 24N 1E 6th Meridian' or 'T4N R5E Sec 12 NE'. " +
+  "Texas example: 'A-175 Reeves County' or 'Block 25 Section 14 Pecos County'. " +
+  "Ensure PLSS inputs include township/range direction letters and a meridian name.";
 
 export function isValidPlss(description: string): boolean {
   const d = description.trim();
@@ -52,11 +53,14 @@ export function validatePlssDescription(description: string): ValidationResult {
     throw new Error("description must not be empty");
   }
 
-  const normalized = normalizePlss(description);
-  const valid = isValidPlss(normalized) || isValidPlss(description);
+  const plssNormalized = normalizePlss(description);
+  if (isValidPlss(plssNormalized) || isValidPlss(description)) {
+    return { valid: true, normalized: plssNormalized, survey_system: "PLSS" };
+  }
 
-  if (valid) {
-    return { valid: true, normalized };
+  const txNormalized = normalizeTxss(description);
+  if (isValidTxss(txNormalized) || isValidTxss(description)) {
+    return { valid: true, normalized: txNormalized, survey_system: "TXSS" };
   }
 
   return { valid: false, suggestion: INVALID_SUGGESTION };

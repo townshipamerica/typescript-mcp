@@ -41,7 +41,9 @@ export async function runPlssToGeojson(
     }
 
     const fc = data as GeoJSONFeatureCollection;
-    const polygonFeatures = fc.features.filter((f) => f.geometry.type === "Polygon");
+    const polygonFeatures = fc.features.filter(
+      (f) => f.geometry.type === "Polygon" || f.geometry.type === "MultiPolygon",
+    );
 
     const result: GeoJSONFeatureCollection = {
       type: "FeatureCollection",

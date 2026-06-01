@@ -50,15 +50,15 @@ export function createServer(
     {
       title: "PLSS to Coordinates",
       description:
-        "Convert a PLSS (Public Land Survey System) legal land description to GPS coordinates. " +
-        "Supports US legal descriptions such as 'NW 25 24N 1E 6th Meridian', 'T4N R5E Sec 12 NE¼', etc. " +
-        "Covers 30 PLSS states and 37 principal meridians.",
+        "Convert a PLSS (Public Land Survey System) or Texas TXSS legal land description to GPS coordinates. " +
+        "Supports US legal descriptions such as 'NW 25 24N 1E 6th Meridian', 'T4N R5E Sec 12 NE¼', " +
+        "'A-175 Reeves County', etc. Covers 30 PLSS states, 37 principal meridians, and all 254 Texas counties.",
       inputSchema: z.object({
         description: z
           .string()
           .min(1)
           .describe(
-            "PLSS legal land description, e.g. 'NW 25 24N 1E 6th Meridian' or 'T4N R5E Sec 12 NE¼'",
+            "Legal land description, e.g. 'NW 25 24N 1E 6th Meridian' or 'A-175 Reeves County'",
           ),
       }),
     },
@@ -70,8 +70,8 @@ export function createServer(
     {
       title: "Coordinates to PLSS",
       description:
-        "Find the PLSS (Public Land Survey System) legal land description for given GPS coordinates. " +
-        "Returns the section, township, range, and principal meridian for any US location covered by PLSS.",
+        "Find the legal land description for given GPS coordinates (PLSS or Texas TXSS). " +
+        "Returns the section/township/range/meridian for PLSS locations or the Texas abstract/block/survey match for TXSS.",
       inputSchema: z.object({
         lat: z
           .number()
@@ -93,14 +93,14 @@ export function createServer(
     {
       title: "PLSS to GeoJSON",
       description:
-        "Get the GeoJSON boundary polygon for a PLSS legal land description. " +
-        "Returns a FeatureCollection with the polygon footprint of the section or quarter-section.",
+        "Get the GeoJSON boundary polygon for a PLSS or Texas TXSS legal land description. " +
+        "Returns a FeatureCollection with the polygon or multipolygon footprint.",
       inputSchema: z.object({
         description: z
           .string()
           .min(1)
           .describe(
-            "PLSS legal land description, e.g. 'NW 25 24N 1E 6th Meridian'",
+            "Legal land description, e.g. 'NW 25 24N 1E 6th Meridian' or 'A-175 Reeves County'",
           ),
       }),
     },
@@ -110,17 +110,17 @@ export function createServer(
   server.registerTool(
     "validate_description",
     {
-      title: "Validate PLSS Description",
+      title: "Validate Legal Description",
       description:
-        "Validate and normalize a PLSS legal land description string. " +
-        "Returns whether the input matches known PLSS patterns, a normalized form, and suggestions if invalid. " +
+        "Validate and normalize a PLSS or Texas TXSS legal land description string. " +
+        "Returns whether the input matches known patterns, a normalized form, survey_system when valid, and suggestions if invalid. " +
         "No API call is made — this runs locally.",
       inputSchema: z.object({
         description: z
           .string()
           .min(1)
           .describe(
-            "PLSS description to validate, e.g. 'NW 25 24N 1E 6th Meridian'",
+            "Legal description to validate, e.g. 'NW 25 24N 1E 6th Meridian' or 'A-175 Reeves County'",
           ),
       }),
     },
@@ -130,9 +130,9 @@ export function createServer(
   server.registerTool(
     "batch_convert",
     {
-      title: "Batch Convert PLSS",
+      title: "Batch Convert Legal Descriptions",
       description:
-        "Convert multiple PLSS legal land descriptions to GPS coordinates in one request. " +
+        "Convert multiple PLSS or Texas TXSS legal land descriptions to GPS coordinates in one request. " +
         `Accepts up to ${MAX_BATCH_SIZE} descriptions per request. Returns total, converted, failed counts and records.`,
       inputSchema: z.object({
         descriptions: z
@@ -140,7 +140,7 @@ export function createServer(
           .min(1)
           .max(MAX_BATCH_SIZE)
           .describe(
-            `Array of PLSS legal land descriptions (max ${MAX_BATCH_SIZE})`,
+            `Array of legal land descriptions (max ${MAX_BATCH_SIZE})`,
           ),
       }),
     },
@@ -150,15 +150,15 @@ export function createServer(
   server.registerTool(
     "autocomplete",
     {
-      title: "PLSS Autocomplete",
+      title: "Legal Description Autocomplete",
       description:
-        "Get autocomplete suggestions for a partial PLSS description (e.g. user typing 'T2N R4'). " +
+        "Get autocomplete suggestions for a partial PLSS or Texas TXSS description (e.g. 'T2N R4' or 'A-175'). " +
         `Returns up to ${MAX_AUTOCOMPLETE_LIMIT} candidate descriptions.`,
       inputSchema: z.object({
         query: z
           .string()
           .min(2)
-          .describe("Partial PLSS description (minimum 2 characters)"),
+          .describe("Partial legal description (minimum 2 characters)"),
         limit: z
           .number()
           .int()

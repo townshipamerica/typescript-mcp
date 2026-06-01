@@ -10,7 +10,12 @@ export interface GeoJSONPolygon {
   coordinates: [number, number][][];
 }
 
-export type GeoJSONGeometry = GeoJSONPoint | GeoJSONPolygon;
+export interface GeoJSONMultiPolygon {
+  type: "MultiPolygon";
+  coordinates: [number, number][][][];
+}
+
+export type GeoJSONGeometry = GeoJSONPoint | GeoJSONPolygon | GeoJSONMultiPolygon;
 
 export interface GeoJSONFeatureProperties {
   legal_location: string;
@@ -42,7 +47,8 @@ export interface SearchResult {
   lng: number;
   state: string;
   county: string;
-  geometry: GeoJSONPolygon | null;
+  survey_system?: string;
+  geometry: GeoJSONPolygon | GeoJSONMultiPolygon | null;
 }
 
 /** Batch conversion record */
@@ -57,6 +63,7 @@ export interface ValidationResult {
   valid: boolean;
   normalized?: string;
   suggestion?: string;
+  survey_system?: "PLSS" | "TXSS";
 }
 
 /** Server factory options */

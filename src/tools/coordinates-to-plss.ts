@@ -52,8 +52,8 @@ export async function runCoordinatesToPlss(
 
     if (!("features" in data) || !data.features?.length) {
       return err(
-        `No PLSS data found for coordinates [${lat}, ${lng}]. ` +
-          "PLSS covers 30 US states — this location may be outside the surveyed area."
+        `No legal land description found for coordinates [${lat}, ${lng}]. ` +
+          "PLSS covers 30 US states and Texas uses TXSS — this location may be outside surveyed coverage.",
       );
     }
 

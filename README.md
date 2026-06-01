@@ -1,6 +1,6 @@
 # townshipamerica-mcp
 
-Township America MCP server — PLSS tools for AI agents (Claude Desktop, Cursor, Continue, Cline).
+Township America MCP server — PLSS and Texas TXSS tools for AI agents (Claude Desktop, Cursor, Continue, Cline).
 
 Requires a [Pro+ subscription](https://townshipamerica.com/pricing) ($99/mo).
 

@@ -30,11 +30,8 @@ export function extractSearchResult(
   const [lng, lat] = coords as [number, number];
 
   const boundary =
-    grid?.geometry.type === "Polygon"
-      ? (grid.geometry as {
-          type: "Polygon";
-          coordinates: [number, number][][];
-        })
+    grid?.geometry.type === "Polygon" || grid?.geometry.type === "MultiPolygon"
+      ? grid.geometry
       : null;
 
   return {
@@ -43,6 +40,7 @@ export function extractSearchResult(
     lng,
     state: props.state,
     county: props.county,
+    survey_system: props.survey_system,
     geometry: boundary,
   };
 }

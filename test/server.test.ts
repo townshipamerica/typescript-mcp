@@ -181,6 +181,18 @@ describe("validate_description", () => {
     expect(typeof parsed.suggestion).toBe("string");
   });
 
+  it("marks a Texas TXSS description as valid", async () => {
+    const res = await runValidateDescription(null, {
+      description: "A-175 Reeves County",
+    });
+    const parsed = JSON.parse(res.content[0].text) as {
+      valid: boolean;
+      survey_system: string;
+    };
+    expect(parsed.valid).toBe(true);
+    expect(parsed.survey_system).toBe("TXSS");
+  });
+
   it("returns error for empty string", async () => {
     const res = await runValidateDescription(null, { description: "" });
     expect(res.isError).toBe(true);
