@@ -5,7 +5,6 @@ import { runCoordinatesToPlss } from "../src/tools/coordinates-to-plss.js";
 import { runPlssToGeojson } from "../src/tools/plss-to-geojson.js";
 import { runValidateDescription } from "../src/tools/validate-description.js";
 import { runBatchConvert } from "../src/tools/batch-convert.js";
-import { runLandReport } from "../src/tools/land-report.js";
 import { runAutocomplete } from "../src/tools/autocomplete.js";
 import { getApiKeyFromEnv } from "../src/env.js";
 import { API_KEY_ENV, LEGACY_API_KEY_ENV } from "../src/constants.js";
@@ -287,21 +286,5 @@ describe("getApiKeyFromEnv", () => {
 
   it("throws when missing", () => {
     expect(() => getApiKeyFromEnv()).toThrow(API_KEY_ENV);
-  });
-});
-
-describe("land_report", () => {
-  it("returns coming_soon stub", async () => {
-    const res = await runLandReport(null, {
-      description: "NW 25 24N 1E 6th Meridian",
-    });
-    expect(res.isError).toBeFalsy();
-    const parsed = JSON.parse(res.content[0].text) as { status: string };
-    expect(parsed.status).toBe("coming_soon");
-  });
-
-  it("returns error for empty description", async () => {
-    const res = await runLandReport(null, { description: "" });
-    expect(res.isError).toBe(true);
   });
 });

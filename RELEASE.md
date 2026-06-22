@@ -96,7 +96,6 @@ tools:
   - validate_description
   - batch_convert
   - autocomplete
-  - land_report
 install:
   command: npx
   args: [-y, "townshipamerica-mcp"]

@@ -1,6 +1,6 @@
 {
   "name": "townshipamerica-mcp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Township America MCP server — PLSS and Texas TXSS tools for AI agents",
   "type": "module",
   "main": "./dist/index.js",

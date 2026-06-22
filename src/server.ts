@@ -16,7 +16,6 @@ import { runCoordinatesToPlss } from "./tools/coordinates-to-plss.js";
 import { runPlssToGeojson } from "./tools/plss-to-geojson.js";
 import { runValidateDescription } from "./tools/validate-description.js";
 import { runBatchConvert } from "./tools/batch-convert.js";
-import { runLandReport } from "./tools/land-report.js";
 import { runAutocomplete } from "./tools/autocomplete.js";
 
 export type { ServerOptions } from "./types.js";
@@ -171,26 +170,6 @@ export function createServer(
       }),
     },
     async ({ query, limit }) => runAutocomplete(client, { query, limit }),
-  );
-
-  server.registerTool(
-    "land_report",
-    {
-      title: "Federal Land Report",
-      description:
-        "Retrieve a Federal Land Report for a PLSS legal land description. " +
-        "Provides federal land status, BLM ownership, mineral rights, surface ownership, and water rights data. " +
-        "NOTE: MCP delivery of Federal Land Reports is coming Q3 2025.",
-      inputSchema: z.object({
-        description: z
-          .string()
-          .min(1)
-          .describe(
-            "PLSS legal land description, e.g. 'NW 25 24N 1E 6th Meridian'",
-          ),
-      }),
-    },
-    async ({ description }) => runLandReport(null, { description }),
   );
 
   return server;

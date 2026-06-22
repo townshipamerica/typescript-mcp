@@ -70,7 +70,6 @@ TOWNSHIP_AMERICA_API_KEY=ta_… townshipamerica-mcp
 | `validate_description` | Validate and normalize locally (no API call) |
 | `batch_convert` | Convert up to 100 descriptions in one request |
 | `autocomplete` | Suggestions for partial PLSS input (max 10) |
-| `land_report` | Federal Land Report — coming Q3 2025 |
 
 Coverage: 30 PLSS states, 37 principal meridians. Powered by BLM CadNSDI V2.
 
